@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Phillip\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-024f83b24734132fcc71f6bfc9cf3eaa23a17cc2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-0e274fbffd54b7d4f304d5ff8fd5aadf180575c2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.1.71\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="0f6d5c1ef2e982c3b7858408e3df389cf5d202da">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-e671e2f82f7b5dae672caee07d279f83a65751b0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.oguzdev\CircularFloatingActionMenu\1.0.2\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="607d961caf1a59b6e782724654c1f3229e036c20">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-8574fcb42ef13362938016339a916933f9cb7a68.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-dc2183b27bccc082481707a62f70f429346d7248.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-a90026602e31111c81eb1d91241373153e41910a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-08476b17be6c9879ba0b3e5421ae3de6b5c6e3ac.jar" />
+    </item>
+    <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-9b3877424645519659a6c48af24359611993bbea.jar" />
+    </item>
+
+</items>
