@@ -3,19 +3,19 @@ package com.project.clip;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,10 +25,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -70,19 +69,42 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private SignInButton mPlusSignInButton;
     private View mSignOutButtons;
     private View mLoginFormView;
+    private boolean logout;
+    private CheckBox autoLogin;
+    private boolean autoLog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
+        Intent intent = getIntent();
+         logout = intent.getBooleanExtra("logout", false); //if it's a string you stored.
+
+
+        autoLogin = (CheckBox)findViewById(R.id.checkbox_Signin);
+
+
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+
+
+
         // Find the Google+ sign in button.
-        mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
+       /* mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
+        mPlusSignInButton.setVisibility(View.GONE);
         if (supportsGooglePlayServices()) {
-            // Set a listener to connect the user when the G+ button is clicked.
+             //Set a listener to connect the user when the G+ button is clicked.
             mPlusSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     signIn();
                 }
             });
@@ -92,7 +114,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             mPlusSignInButton.setVisibility(View.GONE);
             return;
         }
-
+        */
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -113,6 +135,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 attemptLogin();
             }
         });
@@ -138,6 +162,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             return;
         }
 
+
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -148,6 +173,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
         boolean cancel = false;
         View focusView = null;
+
+
+
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+
+
 
 
         // Check for a valid password, if the user entered one.
@@ -175,11 +209,15 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
         }
     }
+
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
@@ -247,9 +285,16 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         });
 
         /*This Intent needs to be on swtich*/
-        //Intent i = new Intent(LoginActivity.this, MainActivity.class);
-       // startActivity(i);
+        if(logout)
+        {
 
+            signOut();
+
+        }
+        else {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+        }
 
     }
 
@@ -264,7 +309,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         boolean connected = getPlusClient().isConnected();
 
         mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
-        mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
+       // mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
     }
 
@@ -276,6 +321,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     protected void onPlusClientSignOut() {
+
+
+
 
     }
 
@@ -405,6 +453,44 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
         }
     }
+    public void onCheckboxClicked(final View view)
+    {
+        boolean checked =  ((CheckBox)view).isChecked();
+        if(checked)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Warning");
+            alert.setMessage("Sensitive data is stored in this app. Auto-login is not recommended.");
+
+
+            alert.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+
+                    //Store auto-login selection
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+                    final SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putBoolean("autoLog",true);
+                    editor.apply();
+
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                    ((CheckBox)view).setChecked(false);
+
+                }
+            });
+            alert.show();
+
+        }
+    }
+
+
+
 }
 
 

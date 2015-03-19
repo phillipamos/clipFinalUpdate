@@ -9,7 +9,7 @@
     <string name="title_section4">Health</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
+    <string name="action_example">Log out</string>
     <string name="action_settings">Settings</string>
     <string name="nav_drawer_education">Education</string>
     <string name="nav_drawer_finance">Finance</string>
@@ -18,5 +18,12 @@
     <string name="nav_drawer_home">Home</string>
     <string name="title_activity_education">Education</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="money">Money</string>
+    <string-array name="credit_cards">
+        <item>MasterCard</item>
+        <item>Visa</item>
+        <item>American Express</item>
+        <item>Discover</item>
+        <item>Other..</item>
+    </string-array>
 </resources>

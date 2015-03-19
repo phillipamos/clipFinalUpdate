@@ -1,6 +1,7 @@
 package com.project.clip;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -256,7 +257,19 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+
+            //Set up intents for LoginActivity
+            Intent myIntent = new Intent(getActivity(), LoginActivity.class);
+            myIntent.putExtra("logout", true); //Logout parameters
+            //Clear back stack prior to logout
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            this.startActivity(myIntent);
+
+
+
+
+            Toast.makeText(getActivity(), "Logged Out.", Toast.LENGTH_SHORT).show();
             return true;
         }
 

@@ -1,7 +1,11 @@
 package com.project.clip;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,12 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+
 
 
 public class MainActivity extends ActionBarActivity
 
         implements NavigationDrawerFragment.NavigationDrawerCallbacks
-
 
     {
 
@@ -31,14 +39,11 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private static final String TAG_HOME_FRAGMENT = "homeFragment";
 
 
 
 
-
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -47,16 +52,12 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
-
-
-
-        /*WebView Declaration - Used For a Stock Ticker*/
 
 
     }
@@ -65,6 +66,7 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
 
+
         android.support.v4.app.Fragment fragment = null;
 
 
@@ -72,7 +74,9 @@ public class MainActivity extends ActionBarActivity
 
             case 0:
                 fragment = new HomeFragment();
-                mTitle ="CLIP";      //getString(R.string.nav_drawer_home);
+                mTitle ="CLIP";
+
+
                 break;
             case 1:
                 fragment = new EducationFragment();
@@ -95,6 +99,7 @@ public class MainActivity extends ActionBarActivity
                 break;
 
             default:
+
                 break;
         }
 
@@ -104,11 +109,12 @@ public class MainActivity extends ActionBarActivity
         /*Create new fragments for each subsection*/
         if (fragment!= null) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame_container, fragment)
-                //TODO: Add all to back stack, or only home?
-                .addToBackStack(null)
-                .commit();
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.frame_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+
 
 
 
@@ -117,11 +123,7 @@ public class MainActivity extends ActionBarActivity
             Log.e("MainActivity", "Error in creating fragment");
 
 
-            // Fragment newFragment = new NavigationDrawerFragment();
-            //FragmentManager fragmentManager = getSupportFragmentManager();
-            //fragmentManager.beginTransaction().replace(R.id.fragment,newFragment)
-            //.addToBackStack(null)
-            //.commit();
+
         }
     }
 
@@ -214,6 +216,7 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 
+
             return rootView;
         }
 
@@ -228,7 +231,166 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    /************ADD FUNDS BUTTON**********************/
+        public void addFunds(View view)
+        {
+
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            final SharedPreferences.Editor editor = prefs.edit();
+
+
+            alert.setTitle("Add Funds");
+            alert.setMessage("Total Funds: ");
+
+            // Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = "$" + input.getText().toString();
+                     // Set pref value
+                    editor.putString("moneyString", value);
+                    editor.apply();
+
+                    //Update the textView
+                    TextView money = (TextView)findViewById(R.id.textView_money);
+                    money.setText(value);
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+
+             alert.show();
+        }
+
+
+    /************ADD ASSETS BUTTON********************/
+        public void addAssets(View view)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Add Assests");
+            alert.setMessage("Total Assests: ");
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            final SharedPreferences.Editor editor = prefs.edit();
 
 
 
-}
+            // Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = "$" +input.getText().toString();
+                    // Do something with value!
+                    editor.putString("assetsString", value);
+                    editor.apply();
+
+                    //Update the textView
+                    TextView assets = (TextView)findViewById(R.id.textView_Assets);
+                    assets.setText(value);
+
+
+
+
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+        }
+
+    /************ADD CREDIT BUTTON********************/
+        public void addCredit(View view)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+            alert.setTitle("Add Credit Balance");
+            alert.setMessage("Total Balance: ");
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            final SharedPreferences.Editor editor = prefs.edit();
+
+            // Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            alert.setView(input);
+
+            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = "$"+ input.getText().toString();
+
+                    editor.putString("creditString", value);
+                    editor.apply();
+
+                    //Update the textView
+                    TextView credit = (TextView)findViewById(R.id.textView_creditcard);
+                    credit.setText(value);
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // Canceled.
+                }
+            });
+
+            alert.show();
+        }
+
+    /************ADD STOCKS BUTTON********************/
+        public void addStocks(View view)
+        {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Update Market Vale");
+        alert.setMessage("Total Value: ");
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            final SharedPreferences.Editor editor = prefs.edit();
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = "$" + input.getText().toString();
+
+                editor.putString("stocksString", value);
+                editor.apply();
+
+                //Update the textView
+                TextView stocks = (TextView)findViewById(R.id.textView_stockValue);
+                stocks.setText(value);
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+        alert.show();
+    }
+
+
+
+
+
+    }

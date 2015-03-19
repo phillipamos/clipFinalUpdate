@@ -19,3 +19,4 @@ public class EducationFragment extends Fragment {
         return rootView;
     }
 }
+

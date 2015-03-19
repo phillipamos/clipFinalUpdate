@@ -10,46 +10,39 @@
         android:id="@+id/card_view_FinancialState"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="125dp"
         card_view:cardCornerRadius="0dp"
         android:visibility="visible"
         card_view:cardElevation ="10dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="5dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#ff167688"
-        android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Financial State"
-            android:id="@+id/textView7"
-            android:textColor="#ffffffff"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageView
-            android:layout_width="30dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:id="@+id/downArrow"
-            android:layout_marginStart="45dp"
-            android:src="@drawable/down_arrow"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="false" />
-    </RelativeLayout>
+            android:background="#ff167688"
+            android:id="@+id/linearLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:elevation="0dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Financial State"
+                android:id="@+id/textView7"
+                android:textColor="#ffffffff"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="110dp"
+            android:layout_height="85dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="false"
             android:layout_marginTop="40dp">
@@ -60,26 +53,29 @@
                 android:layout_height="40dp"
                 android:id="@+id/imageView2"
                 android:layout_marginLeft="25dp"
+                android:layout_marginTop="2dp"
                 android:src="@drawable/currency_dollar"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true"
+                android:onClick="addFunds"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageView3"
                 android:src="@drawable/stock_market"
-
                 android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/imageView2" />
+                android:layout_alignStart="@+id/imageView2"
+                android:onClick="addStocks"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/imageView4"
-                android:layout_marginEnd="142dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/home" />
+                android:src="@drawable/home"
+                android:onClick="addAssets"
+                android:layout_marginStart="98dp"
+                android:layout_alignTop="@+id/imageView2"
+                android:layout_toEndOf="@+id/textView_stockValue" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -87,22 +83,25 @@
                 android:id="@+id/imageView5"
                 android:layout_alignTop="@+id/imageView3"
                 android:layout_alignStart="@+id/imageView4"
-                android:src="@drawable/mastercard" />
+                android:src="@drawable/mastercard"
+                android:onClick="addCredit"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$1,604.08"
+                android:layout_marginLeft="3dp"
                 android:id="@+id/textView_money"
                 android:layout_alignBottom="@+id/imageView2"
                 android:layout_toEndOf="@+id/imageView2"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:editable="true"
+                android:text="@string/money" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/textViewStockValue"
+                android:id="@+id/textView_stockValue"
                 android:layout_alignBottom="@+id/imageView3"
                 android:layout_alignStart="@+id/textView_money"
                 android:layout_marginBottom="10dp"/>
@@ -110,18 +109,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:text="New Text"
-                android:id="@+id/textViewAssests"
-                android:layout_alignBottom="@+id/textView_money"
-                android:layout_toEndOf="@+id/imageView5" />
+                android:id="@+id/textView_Assets"
+                android:layout_alignTop="@+id/textView_money"
+                android:layout_toEndOf="@+id/imageView4" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/textViewCreditCard"
+                android:id="@+id/textView_creditcard"
                 android:layout_alignBottom="@+id/imageView5"
-                android:layout_alignStart="@+id/textViewAssests"
+                android:layout_alignStart="@+id/textView_Assets"
                 android:layout_marginBottom="10dp"/>
         </RelativeLayout>
 
@@ -130,27 +130,20 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_height="150dp"
+        android:id="@+id/card_view_AddStocks"
+        android:layout_height="125dp"
         android:layout_width="match_parent"
         android:layout_below="@id/card_view_FinancialState"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         card_view:cardElevation ="10dp"
         >
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="#ff167688">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/imageView6"
-                android:src="@drawable/down_arrow"
-                android:layout_marginStart="45dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+            android:layout_height="30dp"
+            android:background="#ff167688"
+            android:elevation="0dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -164,8 +157,23 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_below="@id/card_view_AddStocks"
+        android:layout_marginTop="5dp"
+        card_view:cardElevation ="10dp"
+        >
 
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+        android:id="@+id/graph"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
+    </android.support.v7.widget.CardView>
 
 
 

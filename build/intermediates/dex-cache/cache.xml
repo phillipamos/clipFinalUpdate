@@ -23,6 +23,13 @@
         <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-e671e2f82f7b5dae672caee07d279f83a65751b0.jar" />
     </item>
     <item
+        jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.jjoe64\graphview\4.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ae24ad61a573cd1faf8261f5ec6d8f0cb58ddaad">
+        <dex dex="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\pre-dexed\debug\classes-d1dc968738505928e09f226449a6b84ba56aedf1.jar" />
+    </item>
+    <item
         jar="C:\Users\Phillip\AndroidStudioProjects\CLIP\app\build\intermediates\exploded-aar\com.oguzdev\CircularFloatingActionMenu\1.0.2\classes.jar"
         jumboMode="false"
         revision="21.1.2"
