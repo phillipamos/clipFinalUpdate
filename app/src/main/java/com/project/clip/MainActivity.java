@@ -389,8 +389,11 @@ public class MainActivity extends ActionBarActivity
         alert.show();
     }
 
-
-
-
-
+/*        public void onBackPressed()
+        {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }
+*/
     }
+

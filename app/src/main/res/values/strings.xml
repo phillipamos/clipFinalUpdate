@@ -19,11 +19,19 @@
     <string name="title_activity_education">Education</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="money">Money</string>
+    <string name="loading">Loading..</string>
     <string-array name="credit_cards">
         <item>MasterCard</item>
         <item>Visa</item>
         <item>American Express</item>
         <item>Discover</item>
         <item>Other..</item>
+    </string-array>
+    <string-array name="accounts">
+        <item>Account access</item>
+        <item>Bank of America</item>
+        <item>Chase</item>
+        <item>Wells Fargo</item>
+        <item>Add new account</item>
     </string-array>
 </resources>

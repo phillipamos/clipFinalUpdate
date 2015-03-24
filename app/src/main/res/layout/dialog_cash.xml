@@ -27,7 +27,7 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:id="@+id/editText_cash"
+        android:id="@+id/editText_assets"
         android:hint="Cash"
         android:layout_marginTop="42dp"
         android:layout_below="@+id/imageButton4"
@@ -74,7 +74,7 @@
         android:id="@+id/imageButton4"
         android:src="@drawable/ic_action_new_small"
         android:layout_below="@+id/editText"
-        android:layout_alignStart="@+id/editText_cash"
+        android:layout_alignStart="@+id/editText_assets"
         android:layout_alignEnd="@+id/imageButton3" />
 
     <ImageButton
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageButton3"
         android:src="@drawable/ic_action_new_small"
-        android:layout_below="@+id/editText_cash"
-        android:layout_alignStart="@+id/editText_cash" />
+        android:layout_below="@+id/editText_assets"
+        android:layout_alignStart="@+id/editText_assets" />
 
 </RelativeLayout>

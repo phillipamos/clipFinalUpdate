@@ -59,7 +59,7 @@
                     android:layout_height="25dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Add Contact"
-                    android:id="@+id/textView"
+                    android:id="@+id/textViewAsset"
                     android:layout_weight="0.06"
                     android:textSize="20dp"
                     android:textColor="#ffffffff"
