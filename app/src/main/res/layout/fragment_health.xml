@@ -1,13 +1,222 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Health"
-        android:id="@+id/textView3"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recyclerView_Health"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_CurrentVitalSign"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        card_view:cardCornerRadius="0dp"
+        android:visibility="visible"
+        card_view:cardElevation ="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#ff167688"
+            android:id="@+id/linearLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:elevation="0dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Vital Sign State"
+                android:id="@+id/VitalSignState"
+                android:textColor="#ffffffff"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginTop="40dp">
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/bloodPressureIcon"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/bpicon"
+            android:layout_alignParentTop="true"
+       />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/textViewBP"
+                android:layout_toEndOf="@+id/bloodPressureIcon"
+                android:layout_marginBottom="10dp"
+                android:editable="true"
+                android:text="Blood Pressure" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/HeartRateIcon"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/pulseicon"
+                android:layout_alignStart="@+id/bloodPressureIcon"
+                android:layout_alignParentBottom="true"
+               />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/textViewPulse"
+                android:layout_toEndOf="@+id/HeartRateIcon"
+                android:editable="true"
+                android:text="Heart Rate"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/temperatureIcon"
+                android:src="@drawable/temp"
+                android:onClick="addAssets"
+                android:layout_marginStart="98dp"
+                android:layout_alignTop="@+id/bloodPressureIcon"
+                android:layout_toEndOf="@+id/textViewPulse"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/textViewTemperature"
+                android:layout_toEndOf="@+id/temperatureIcon"
+                android:editable="true"
+                android:text="Temp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentTop="true"
+               />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/respIcon"
+                android:src="@drawable/respirationicon"
+                android:onClick="addAssets"
+                android:layout_marginStart="98dp"
+
+                android:layout_toEndOf="@+id/textViewPulse"
+                android:layout_alignParentBottom="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/textViewRespiration"
+                android:layout_toEndOf="@+id/respIcon"
+                android:editable="true"
+                android:text="resp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentBottom="true"
+                />
+
+
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view_CurrentDiet"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        card_view:cardCornerRadius="0dp"
+        android:visibility="visible"
+        card_view:cardElevation ="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/card_view_CurrentVitalSign">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#ff167688"
+            android:id="@+id/linearLayout2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:elevation="0dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Diet Mananagement"
+                android:id="@+id/Diet"
+                android:textColor="#ffffffff"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="85dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginTop="40dp"
+            >
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/weightIconId"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/weighticon"
+                android:layout_alignParentTop="true"
+                android:onClick="addFunds"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/weightId"
+                android:layout_toEndOf="@+id/weightIconId"
+                android:layout_marginBottom="10dp"
+                android:editable="true"
+                android:text="Weight" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/exerciseIconid"
+                android:src="@drawable/exerciseicon"
+                android:onClick="addAssets"
+                android:layout_marginStart="98dp"
+                android:layout_alignTop="@+id/weightId"
+                android:layout_toEndOf="@+id/weightId"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/exercisePlan"
+                android:layout_toEndOf="@+id/exerciseIconid"
+                android:editable="true"
+                android:text="Temp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentTop="true"
+                />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+
+
 </RelativeLayout>
