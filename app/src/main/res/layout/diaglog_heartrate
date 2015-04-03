@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:http="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id = "@+id/HeartRateDialog"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="#ff167688"
+        android:id="@+id/heartRateLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Add Heart Rate"
+            android:id="@+id/textViewHeartRate"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffffff" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Diastolic:"
+        android:id="@+id/textViewHeartRateId"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="36dp"
+        android:layout_below="@+id/heartRateLayout"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/EditViewDiastolic"
+        android:layout_below="@+id/textViewHeartRateId"
+        android:layout_alignStart="@+id/textViewHeartRateId"
+        android:inputType="number"/>
+
+
+
+
+
+</RelativeLayout>
