@@ -46,7 +46,7 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editText_creditValue"
         android:layout_marginLeft="0dp"
         android:layout_below="@+id/textView12"
         android:layout_alignStart="@+id/textView12" />
@@ -67,8 +67,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageButton4"
         android:src="@drawable/ic_action_new_small"
-        android:layout_below="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_below="@+id/editText_creditValue"
+        android:layout_alignStart="@+id/editText_creditValue" />
 
     <Spinner
         android:layout_width="250dp"

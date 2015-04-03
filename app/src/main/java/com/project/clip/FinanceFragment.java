@@ -2,9 +2,11 @@ package com.project.clip;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
+import java.util.List;
 
 public class FinanceFragment extends Fragment implements View.OnClickListener {
 
@@ -51,18 +56,39 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     private static final String TAG_ADD_CREDIT = "addCredit";
     private static final String TAG_ADD_ASSETS = "addAssets";
     private static final String TAG_ADD_STOCKS = "addStocks";
+    private static final String TAG_PAYMENT_REMINDER = "paymentReminder";
+
+
+
 
 
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        FinanceDataSource datasource;
         //GraphView variables
         double day1,day2,day3,day4,day5,day6,day7;
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_finance, container, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Payment reminder button
+        ImageButton paymentReminderButton = (ImageButton)rootView.findViewById(R.id.button_paybills);
+        paymentReminderButton.setOnClickListener(this);
 
 
 
@@ -85,29 +111,22 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                ProgressBar progressBar = new ProgressBar(getActivity());
-               final AlertDialog.Builder Alert = new AlertDialog.Builder(getActivity());
-
-
                 switch (position) {
                     case (1):
-
-                        ShowProgressBar(progressBar,Alert);
-
-
+                        ShowProgressBar();
                         String url = "https://www.bankofamerica.com";
                         ShowAccountAlert(url);
-
                         break;
 
                     case(2):
-
+                        ShowProgressBar();
                         url = "https://www.chase.com";
                         ShowAccountAlert(url);
 
                         break;
 
                     case(3):
+                        ShowProgressBar();
                         url = "http://www.wellsfargo.com";
                         ShowAccountAlert(url);
                         break;
@@ -120,7 +139,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
 
 
-        //TODO Add listeners for add new accout. Design function to create new dialogs
+        //TODO Add listeners for add new account.
 
             }
 
@@ -133,11 +152,6 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         };
 
         spinner.setOnItemSelectedListener(account_listener);
-
-
-
-
-
 
 
         //Set CASH TextView
@@ -176,7 +190,8 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
         actionButton.setVisibility(View.INVISIBLE);
         actionMenu.close(false);
-
+       // datasource.open();
+        super.onResume();
 
     }
 
@@ -193,43 +208,57 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+            //TODO Set up switch here to avoid NULL pointers
 
-        ProgressBar loading = new ProgressBar(getActivity());
 
         actionMenu.close(true);
-
-        if (v.getTag().equals(TAG_ADD_FUNDS)) {
-
-            ShowAddAlert(R.layout.dialog_cash);
+        if(v.getId()==R.id.button_paybills){
+            ShowPaymentReminder();
 
         }
-        if (v.getTag().equals(TAG_ADD_CREDIT)) {
 
-           ShowAddAlert(R.layout.dialog_credit);
+        else if (v.getTag().equals(TAG_ADD_FUNDS)) {
+
+            ShowAddAlert(R.layout.dialog_cash,v);
 
         }
-        if (v.getTag().equals(TAG_ADD_ASSETS)) {
+        else if (v.getTag().equals(TAG_ADD_CREDIT)) {
 
-           ShowAddAlert(R.layout.dialog_assets);
+           ShowAddAlert(R.layout.dialog_credit,v);
+
+        }
+        else if (v.getTag().equals(TAG_ADD_ASSETS)) {
+
+           ShowAddAlert(R.layout.dialog_assets,v);
         }
 
-        if (v.getTag().equals(TAG_ADD_STOCKS)) {
+        else if (v.getTag().equals(TAG_ADD_STOCKS)) {
 
-           ShowAddAlert(R.layout.dialog_stocks);
+           ShowAddAlert(R.layout.dialog_stocks,v);
         }
 
-    }
 
-void ShowProgressBar( ProgressBar progressBar, AlertDialog.Builder alertDialog)
+        }
+
+
+
+void ShowProgressBar()
 {
-    try{
-        Thread.sleep(2000);
-    }
-    catch(InterruptedException e){
+    final ProgressBar progressBar = new ProgressBar(getActivity());
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-    }
-    alertDialog.setView(progressBar);
-    alertDialog.show();
+    final AlertDialog alert = builder.create();
+    alert.setView(progressBar);
+    alert.show();
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+        public void run() {
+            alert.dismiss();
+        }
+    }, 3500);
+
+
+
 }
 
 void ShowAccountAlert(String url)
@@ -237,13 +266,11 @@ void ShowAccountAlert(String url)
 
 
     final AlertDialog.Builder Alert = new AlertDialog.Builder(getActivity());
-
-
     ProgressBar mProgress = new ProgressBar(getActivity());
-    //ShowProgressBar(mProgress,BofAalert);
 
 
-    WebView webView = new WebView(getActivity()) {
+
+   final WebView webView = new WebView(getActivity()) {
         @Override
         public boolean onCheckIsTextEditor() {
             return true;
@@ -256,19 +283,23 @@ void ShowAccountAlert(String url)
 
 
 
+
+
     webView.setWebViewClient(new WebViewClient() {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view,String url) {
             view.loadUrl(url);
             return true;
         }
+
     });
+
 
 
 
     Alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-
+        dialog.dismiss();
 
         }
     });
@@ -276,41 +307,107 @@ void ShowAccountAlert(String url)
     Alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
             // Canceled.
+          dialog.cancel();
         }
     });
 
 
 
+    // Execute some code after 3.5 seconds have passed
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+        public void run() {
+            Alert.setView(webView);
+            Alert.show();
 
-    Alert.setView(webView);
-    Alert.show();
+
+        }
+    }, 3500);
+
+
 
 
 }
-void ShowAddAlert(int layoutID)
+
+
+void ShowAddAlert(final int layoutID, final View view)
 {
-    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+
+
+    final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+     final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
     final SharedPreferences.Editor editor = prefs.edit();
 
 
-
-
-    // Set an EditText view to get user input
-    final EditText input = (EditText)getView().findViewById(R.id.editText_assets);
-    //alert.setView(input);
-
     alert.setView(layoutID);
-    alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+    alert.setPositiveButton("Update Totals", new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            String value = "$" + input.getText().toString();
-            // Set pref value
-            editor.putString("moneyString", value);
-            editor.apply();
 
-            //Update the textView
-            TextView money = (TextView) getView().findViewById(R.id.textView_money);
-            money.setText(value);
+            switch(layoutID){
+
+
+                case(R.layout.dialog_cash):
+
+                    Dialog f  = (Dialog) dialog;
+
+                    EditText cashInput = (EditText)f.findViewById(R.id.editText_Cash);
+                    String value = "$" + cashInput.getText().toString();
+                    // Set pref value
+                    editor.putString("moneyString", value);
+                    editor.apply();
+                    //Update the textView
+                    TextView money = (TextView)getActivity().findViewById(R.id.textView_money); //This is working
+                    money.setText(value);
+                    break;
+
+                case(R.layout.dialog_assets):
+                     f  = (Dialog) dialog;
+                    EditText assetsInput = (EditText)f.findViewById(R.id.editText_creditValue);
+                    value = "$" + assetsInput.getText().toString();
+
+
+                    // Set pref value
+                    editor.putString("assetsString", value);
+                    editor.apply();
+                    //Update the textView
+                    TextView assets = (TextView)getActivity().findViewById(R.id.textView_Assets); //This is working
+                    assets.setText(value);
+                    break;
+
+                case(R.layout.dialog_credit):
+                    f  = (Dialog) dialog;
+                    EditText creditBalanceInput = (EditText)f.findViewById(R.id.editText_creditValue);
+                    value = "$" + creditBalanceInput.getText().toString();
+
+
+                    // Set pref value
+                    editor.putString("creditString", value);
+                    editor.apply();
+                    //Update the textView
+                    TextView credit = (TextView)getActivity().findViewById(R.id.textView_creditcard); //This is working
+                    credit.setText(value);
+                    break;
+
+
+                case(R.layout.dialog_stocks):
+                    f  = (Dialog) dialog;
+                    EditText brokerageDeposit = (EditText)f.findViewById(R.id.editText_brokerage);
+                    value = "$" + brokerageDeposit.getText().toString();
+
+
+                    // Set pref value
+                    editor.putString("creditString", value);
+                    editor.apply();
+                    //Update the textView
+                    TextView brokerage = (TextView)getActivity().findViewById(R.id.textView_stockValue); //This is working
+                    brokerage.setText(value);
+                    break;
+
+
+
+            }
+
         }
     });
 
@@ -399,4 +496,125 @@ void SetUpGraphView(View rootView)
     graph.addSeries(series);
 
 }
+
+
+//TODO ADD a lot of shit to ShowPaymentReminder()
+void ShowPaymentReminder()
+    {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        final int i = 3;
+
+
+
+
+
+
+        MainActivity.database.createNetwork("name","affiliation","date","times used","comments");
+
+        final List<FinanceData> values = MainActivity.database.getAllComments(DataStrings.TABLE_NETWORK);
+
+       // String[] values = MainActivity.database.getAllNetwork();
+
+
+        // Set an EditText view to get user input
+        final ListView list= new ListView(getActivity());
+
+
+        //TODO Set up ArrayAdapter for listview
+        String reminders[] = new String[i+1];
+        reminders[0] = "Electricity   -  Next due: 4/28/15 ";
+        reminders[1] = "Master Card   -  Next due: 5/1/15";
+        reminders[2] = "Cell Phone    -  Next due: 5/2/15";
+        reminders[i] = "Add bill reminder";
+
+
+        ArrayAdapter<FinanceData> adapter = new ArrayAdapter<FinanceData>(getActivity(),
+                android.R.layout.simple_list_item_1, values);
+
+
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+        //        android.R.layout.simple_list_item_1, reminders);
+
+        list.setAdapter(adapter);
+
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(position)
+                {
+                    case(3):
+
+
+
+
+
+                }
+            }
+        });
+
+
+
+
+
+
+        alert.setView(list);
+
+        alert.setPositiveButton("Add reminder", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                final SharedPreferences.Editor editor = prefs.edit();
+
+
+                alert.setTitle("Add bill reminder");
+                alert.setMessage("Bill name and due date: ");
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(getActivity());
+                alert.setView(input);
+
+                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //TODO Update "Save" function to include new bills and due dates.
+                        String value = input.getText().toString();
+
+
+
+                        MainActivity.database.createNetwork("name","affiliation","date","times used","comments");
+
+
+
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+
+                alert.show();
+
+            }
+        });
+
+
+        alert.setNegativeButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
+
+
+        alert.show();
+
+    }
+
+
+
 }
+

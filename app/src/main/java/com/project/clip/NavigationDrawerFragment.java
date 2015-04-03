@@ -272,6 +272,15 @@ public class NavigationDrawerFragment extends Fragment {
             Toast.makeText(getActivity(), "Logged Out.", Toast.LENGTH_SHORT).show();
             return true;
         }
+        if(item.getItemId() == R.id.action_settings){
+
+
+
+
+
+
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

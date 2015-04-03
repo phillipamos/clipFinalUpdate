@@ -1,7 +1,29 @@
 package com.project.clip;
 
-/**
- * Created by Phillip on 4/1/2015.
- */
-public class FinanceData {
+
+public class FinanceData{
+    private long id;
+    private String comment;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    // Will be used by the ArrayAdapter in the ListView
+    @Override
+    public String toString() {
+        return comment;
+    }
 }

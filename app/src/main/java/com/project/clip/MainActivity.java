@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity
 
         implements NavigationDrawerFragment.NavigationDrawerCallbacks
 
-    {
+{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -41,22 +41,29 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private static final String TAG_HOME_FRAGMENT = "homeFragment";
 
-
+    public static FinanceDataSource database;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        database = new FinanceDataSource(this);
+        database.open();
+
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
 
-            // Set up the drawer.
-            mNavigationDrawerFragment.setUp(
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
 
 
 
@@ -70,11 +77,11 @@ public class MainActivity extends ActionBarActivity
         android.support.v4.app.Fragment fragment = null;
 
 
-        switch(position){
+        switch (position) {
 
             case 0:
                 fragment = new HomeFragment();
-                mTitle ="CLIP";
+                mTitle = "CLIP";
 
 
                 break;
@@ -107,21 +114,18 @@ public class MainActivity extends ActionBarActivity
 
 
         /*Create new fragments for each subsection*/
-        if (fragment!= null) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.frame_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
-
-
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
 
 
-    } else {
+        } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
-
 
 
         }
@@ -176,7 +180,6 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
 
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -216,11 +219,8 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 
-
             return rootView;
         }
-
-
 
 
         @Override
@@ -231,137 +231,138 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    /************ADD FUNDS BUTTON**********************/
-        public void addFunds(View view)
-        {
+    /**
+     * *********ADD FUNDS BUTTON*********************
+     */
+    public void addFunds(View view) {
 
 
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            final SharedPreferences.Editor editor = prefs.edit();
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = prefs.edit();
 
 
-            alert.setTitle("Add Funds");
-            alert.setMessage("Total Funds: ");
+        alert.setTitle("Add Funds");
+        alert.setMessage("Total Funds: ");
 
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
 
-            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String value = "$" + input.getText().toString();
-                     // Set pref value
-                    editor.putString("moneyString", value);
-                    editor.apply();
+        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = "$" + input.getText().toString();
+                // Set pref value
+                editor.putString("moneyString", value);
+                editor.apply();
 
-                    //Update the textView
-                    TextView money = (TextView)findViewById(R.id.textView_money);
-                    money.setText(value);
-                }
-            });
+                //Update the textView
+                TextView money = (TextView) findViewById(R.id.textView_money);
+                money.setText(value);
+            }
+        });
 
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
-                }
-            });
-
-
-             alert.show();
-        }
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
 
 
-    /************ADD ASSETS BUTTON********************/
-        public void addAssets(View view)
-        {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-            alert.setTitle("Add Assests");
-            alert.setMessage("Total Assests: ");
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            final SharedPreferences.Editor editor = prefs.edit();
+        alert.show();
+    }
 
 
+    /**
+     * *********ADD ASSETS BUTTON*******************
+     */
+    public void addAssets(View view) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
+        alert.setTitle("Add Assests");
+        alert.setMessage("Total Assests: ");
 
-            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String value = "$" +input.getText().toString();
-                    // Do something with value!
-                    editor.putString("assetsString", value);
-                    editor.apply();
-
-                    //Update the textView
-                    TextView assets = (TextView)findViewById(R.id.textView_Assets);
-                    assets.setText(value);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = prefs.edit();
 
 
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = "$" + input.getText().toString();
+                // Do something with value!
+                editor.putString("assetsString", value);
+                editor.apply();
+
+                //Update the textView
+                TextView assets = (TextView) findViewById(R.id.textView_Assets);
+                assets.setText(value);
 
 
-                }
-            });
+            }
+        });
 
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
-                }
-            });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
 
-            alert.show();
-        }
+        alert.show();
+    }
 
-    /************ADD CREDIT BUTTON********************/
-        public void addCredit(View view)
-        {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    /**
+     * *********ADD CREDIT BUTTON*******************
+     */
+    public void addCredit(View view) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-            alert.setTitle("Add Credit Balance");
-            alert.setMessage("Total Balance: ");
+        alert.setTitle("Add Credit Balance");
+        alert.setMessage("Total Balance: ");
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            final SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = prefs.edit();
 
-            // Set an EditText view to get user input
-            final EditText input = new EditText(this);
-            alert.setView(input);
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
 
-            alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String value = "$"+ input.getText().toString();
+        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = "$" + input.getText().toString();
 
-                    editor.putString("creditString", value);
-                    editor.apply();
+                editor.putString("creditString", value);
+                editor.apply();
 
-                    //Update the textView
-                    TextView credit = (TextView)findViewById(R.id.textView_creditcard);
-                    credit.setText(value);
-                }
-            });
+                //Update the textView
+                TextView credit = (TextView) findViewById(R.id.textView_creditcard);
+                credit.setText(value);
+            }
+        });
 
-            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // Canceled.
-                }
-            });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+            }
+        });
 
-            alert.show();
-        }
+        alert.show();
+    }
 
-    /************ADD STOCKS BUTTON********************/
-        public void addStocks(View view)
-        {
+    /**
+     * *********ADD STOCKS BUTTON*******************
+     */
+    public void addStocks(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
         alert.setTitle("Update Market Vale");
         alert.setMessage("Total Value: ");
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            final SharedPreferences.Editor editor = prefs.edit();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = prefs.edit();
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
@@ -375,7 +376,7 @@ public class MainActivity extends ActionBarActivity
                 editor.apply();
 
                 //Update the textView
-                TextView stocks = (TextView)findViewById(R.id.textView_stockValue);
+                TextView stocks = (TextView) findViewById(R.id.textView_stockValue);
                 stocks.setText(value);
             }
         });
@@ -395,5 +396,4 @@ public class MainActivity extends ActionBarActivity
             startActivity(i);
         }
 */
-    }
-
+}
