@@ -21,9 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
-
-
 public class MainActivity extends ActionBarActivity
 
         implements NavigationDrawerFragment.NavigationDrawerCallbacks
@@ -236,41 +233,25 @@ public class MainActivity extends ActionBarActivity
      */
     public void addFunds(View view) {
 
-
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = prefs.edit();
+        android.support.v4.app.Fragment fragment = new FinanceRecycler();
 
 
-        alert.setTitle("Add Funds");
-        alert.setMessage("Total Funds: ");
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = "$" + input.getText().toString();
-                // Set pref value
-                editor.putString("moneyString", value);
-                editor.apply();
-
-                //Update the textView
-                TextView money = (TextView) findViewById(R.id.textView_money);
-                money.setText(value);
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
 
 
-        alert.show();
-    }
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+
+
+        }
+}
 
 
     /**
@@ -396,4 +377,7 @@ public class MainActivity extends ActionBarActivity
             startActivity(i);
         }
 */
+
+
+
 }

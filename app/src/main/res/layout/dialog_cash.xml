@@ -29,15 +29,15 @@
         android:layout_height="50dp"
         android:id="@+id/editText_Cash"
         android:hint="Cash"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/imageButton4"
-        android:layout_alignStart="@+id/editText_creditValue" />
+        android:layout_marginTop="135dp"
+        android:layout_alignStart="@+id/editText_stockValue"
+        android:layout_below="@+id/editText_stockValue" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Bank"
+        android:text="Bank:"
         android:id="@+id/textView10"
         android:layout_marginTop="25dp"
         android:layout_marginStart="36dp"
@@ -47,17 +47,16 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/textView11"
+        android:id="@+id/editText_cardIssuer"
         android:layout_below="@+id/textView10"
         android:layout_alignStart="@+id/textView10" />
 
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_creditValue"
-        android:layout_below="@+id/textView11"
-        android:layout_alignStart="@+id/textView11"
-        android:layout_marginTop="25dp" />
+        android:id="@+id/editText_stockValue"
+        android:layout_below="@+id/textView12"
+        android:layout_alignStart="@+id/editText_cardIssuer" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,24 +64,32 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Account value:"
         android:id="@+id/textView12"
-        android:layout_below="@+id/textView11"
-        android:layout_alignStart="@+id/editText_creditValue" />
+        android:layout_below="@+id/editText_cardIssuer"
+        android:layout_alignStart="@+id/editText_stockValue" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton4"
+        android:id="@+id/button_addBrokerage"
         android:src="@drawable/ic_action_new_small"
-        android:layout_below="@+id/editText_creditValue"
-        android:layout_alignStart="@+id/editText_Cash"
-        android:layout_alignEnd="@+id/button_addCash" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_addCash"
-        android:src="@drawable/ic_action_new_small"
+        android:clickable="true"
         android:layout_below="@+id/editText_Cash"
-        android:layout_alignStart="@+id/editText_Cash" />
+        android:layout_alignLeft="@+id/editText_stockValue" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Web Address:"
+        android:id="@+id/textView_bankWebAdd"
+        android:layout_below="@+id/editText_stockValue"
+        android:layout_alignStart="@+id/editText_stockValue" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_bankwebAddress"
+        android:layout_below="@+id/textView_bankWebAdd"
+        android:layout_alignStart="@+id/textView_bankWebAdd" />
 
 </RelativeLayout>

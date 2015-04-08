@@ -47,7 +47,7 @@
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_creditValue"
+        android:id="@+id/editText_stockValue"
         android:layout_below="@+id/editText_assetName"
         android:layout_alignStart="@+id/editText_assetName"
         android:layout_marginTop="25dp" />
@@ -59,14 +59,6 @@
         android:text="Value"
         android:id="@+id/textView12"
         android:layout_below="@+id/editText_assetName"
-        android:layout_alignStart="@+id/editText_creditValue" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton4"
-        android:src="@drawable/ic_action_new_small"
-        android:layout_below="@+id/editText_creditValue"
-        android:layout_alignStart="@+id/editText_creditValue" />
+        android:layout_alignStart="@+id/editText_stockValue" />
 
 </RelativeLayout>
