@@ -37,6 +37,14 @@
         <item>Wells Fargo</item>
         <item>Add new account</item>
     </string-array>
+    <string-array name ="security">
+        <item>What is your paternal grandmother\'s first name?</item>
+        <item>What is your first pets name?</item>
+    </string-array>
+    <string name="title_activity_new_user">NewUserActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_activity_register">ActivityRegister</string>
 
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/dialog_addbill">
 
 
     <TextView
@@ -23,9 +24,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Due date"
         android:id="@+id/textView3"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="124dp"
         android:layout_below="@+id/editText_billName"
         android:layout_alignParentStart="true" />
+
+
+
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,12 +43,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="17dp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText_dueDate"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,15 +51,27 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Web address:"
         android:id="@+id/textViewBillAddress"
-        android:layout_below="@+id/editText_dueDate"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="31dp" />
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/editText_billName"
+        android:layout_alignParentStart="true" />
+
+
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_billAddress"
         android:layout_below="@+id/textViewBillAddress"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true" />
+
+    <DatePicker
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:id="@+id/datePicker"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

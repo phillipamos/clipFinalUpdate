@@ -72,7 +72,7 @@ public class DataStrings {
         public static final String COLUMN_ASSET_NAME = "name";
         public static final String COLUMN_ASSET_VALUE = "value";
         public static final String TABLE_CREATE_ASSETS = "create table "
-            +TABLE_ASSETS + "("  + COLUMN_ASSET_ID     + " text null, "
+            +TABLE_ASSETS + "("  + COLUMN_ASSET_ID     + " integer primary key autoincrement, "
                                  + COLUMN_ASSET_NAME  +  " text null, "
                                  + COLUMN_ASSET_VALUE + " text null); ";
 

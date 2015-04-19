@@ -246,7 +246,7 @@ public class FinanceDataSource extends SQLiteOpenHelper{
     public void createReminder(String name, String address, String date){
         ContentValues values = new ContentValues();
 
-        values.put(DataStrings.COLUMN_BILL, name + "      " + date);
+        values.put(DataStrings.COLUMN_BILL, name + "    " + date);
         values.put(DataStrings.COLUMN_BILL_SITE, address);
         values.put(DataStrings.COLUMN_BILL_DUE, date);
 
@@ -325,38 +325,6 @@ public class FinanceDataSource extends SQLiteOpenHelper{
 
 
 
-    public FinanceData createNetwork(String name, String affiliation, String date, String used,
-    String comment){
-
-
-        ContentValues values = new ContentValues();
-
-        values.put(DataStrings.COLUMN_NAME, name);
-        values.put(DataStrings.COLUMN_AFFILIATION,affiliation);
-        values.put(DataStrings.COLUMN_DATE_EST, date);
-        values.put(DataStrings.COLUMN_TIMES_USED, used);
-        values.put(DataStrings.COLUMN_COMMENTS, comment);
-
-        long insertId = database.insert(DataStrings.TABLE_NETWORK, null, values);
-
-        Cursor cursor = database.query(DataStrings.TABLE_NETWORK, networkColumns,DataStrings.COLUMN_NETWORK_ID
-        +" = "+ insertId,null,null,null,null);
-
-        cursor.moveToFirst();
-        FinanceData newNetwork = cursorToComment(cursor);
-        cursor.close();
-        return newNetwork;
-
-    }
-
-
-
-    public String[] returnString()
-    {
-        Cursor dbCursor = database.query(DataStrings.TABLE_NETWORK, null, null, null, null, null, null);
-        String[] columnNames = dbCursor.getColumnNames();
-        return columnNames;
-    }
 
 
 
@@ -371,53 +339,6 @@ public class FinanceDataSource extends SQLiteOpenHelper{
     }
 
 
-
-    public List<FinanceData> getAllTotals(String TABLE) {
-        List<FinanceData> comments = new ArrayList<FinanceData>();
-
-
-
-        Cursor cursor = database.query(TABLE,
-                totalsColumns, null, null, null, null, null);
-
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            FinanceData comment = cursorToComment(cursor);
-            comments.add(comment);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return comments;
-    }
-
-
-
-    public List<FinanceData> getAllNetwork(){
-
-        List<FinanceData> comments = new ArrayList<FinanceData>();
-
-
-
-        Cursor cursor = database.query(DataStrings.TABLE_NETWORK,
-                networkColumns, null, null, null, null, null);
-
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            FinanceData comment = cursorToComment(cursor);
-            comments.add(comment);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return comments;
-
-
-
-
-    }
 
     private FinanceData cursorToComment(Cursor cursor) {
         FinanceData comment = new FinanceData();

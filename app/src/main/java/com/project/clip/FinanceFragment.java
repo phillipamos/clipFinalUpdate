@@ -3,6 +3,7 @@ package com.project.clip;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,6 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,8 +51,7 @@ import java.util.Date;
 import java.util.List;
 
 
-
-public class FinanceFragment extends Fragment implements View.OnClickListener {
+public class FinanceFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
 
     TextView cashTextView;
@@ -57,12 +61,20 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     FloatingActionButton actionButton;
     FloatingActionMenu actionMenu;
 
+
+
+    public static ArrayAdapter<String> billReminderAdapter;
+    public static ArrayAdapter<String> accountAdapter;
+    public static Spinner accountsSpinner;
+
     //Strings for determining which FAB button was clicked
     private static final String TAG_ADD_FUNDS = "addFunds";
     private static final String TAG_ADD_CREDIT = "addCredit";
     private static final String TAG_ADD_ASSETS = "addAssets";
     private static final String TAG_ADD_STOCKS = "addStocks";
 
+
+    public static int stockCounter = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,6 +99,9 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             editor.putBoolean("initDBTotal", true);
             editor.apply();
         }
+
+
+
 
 
         //Set CASH TextView
@@ -150,6 +165,8 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+
     @Override
     public void onClick(View v) {
         //TODO Set up switch here to avoid NULL pointers. Replace else ifs
@@ -212,8 +229,8 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         };
 
         webView.loadUrl(url);
-        WebSettings BofAwebSettings = webView.getSettings();
-        BofAwebSettings.setJavaScriptEnabled(true);
+        WebSettings accountSettings = webView.getSettings();
+        accountSettings.setJavaScriptEnabled(true);
 
 
         webView.setWebViewClient(new WebViewClient() {
@@ -239,7 +256,14 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                 dialog.cancel();
             }
         });
-
+        //Prevent the dialog from reshowing on back button press
+        Alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //do whatever you want the back key to do
+              dialog.cancel();
+            }
+        });
 
         // Execute some code after 3.5 seconds have passed
         Handler handler = new Handler();
@@ -322,6 +346,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                         MainActivity.database.createAccount(issuer, addr, balance);
                         Toast toast = Toast.makeText(getActivity(), "Credit account added", Toast.LENGTH_LONG);
                         toast.show();
+                        //Update the Account spinner's adapter to populate the new values without reloading fragment
+                        final List<String> accountNames = MainActivity.database.getAllFromDb(DataStrings.TABLE_ACCOUNTS,
+                                DataStrings.COLUMN_ACCOUNT_NAME);
+                        accountAdapter = new ArrayAdapter<String>(getActivity(),
+                                android.R.layout.simple_spinner_dropdown_item, accountNames);
+                        accountsSpinner.setAdapter(accountAdapter);
                         //Reset the text views for a new account to be added
                         cardIssuer.setText(null);
                         cardBalance.setText(null);
@@ -423,12 +453,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             });
 
 
-            //Set up stocks edit texts
+
 
 
         }
 
-        alert.setPositiveButton("Update Totals", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton("Add/Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 AccountSpinner(view, true);
                 //Switch on all layouts
@@ -461,7 +491,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                             MainActivity.database.createAccount(name, webAddr, balance);
                             MainActivity.database.createTotal(null, null, null, null, balance);
                         }
-
+                        //Update the account spinner's adapter by rebuilding the account names and setting it to the spinner
+                        final List<String> accountNames = MainActivity.database.getAllFromDb(DataStrings.TABLE_ACCOUNTS,
+                                DataStrings.COLUMN_ACCOUNT_NAME);
+                        accountAdapter = new ArrayAdapter<String>(getActivity(),
+                                android.R.layout.simple_spinner_dropdown_item, accountNames);
+                        accountsSpinner.setAdapter(accountAdapter);
 
                         //Update the textView
                         TextView money = (TextView) getActivity().findViewById(R.id.textView_money);
@@ -516,11 +551,19 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                             MainActivity.database.createAccount(issuer, addr, Balance);
                             Toast toast = Toast.makeText(getActivity(), "Credit account added", Toast.LENGTH_LONG);
                             toast.show();
+                            //Update the Account spinner's adapter to populate the new values without reloading fragment
+                            final List<String> names = MainActivity.database.getAllFromDb(DataStrings.TABLE_ACCOUNTS,
+                                    DataStrings.COLUMN_ACCOUNT_NAME);
+                            accountAdapter = new ArrayAdapter<String>(getActivity(),
+                                    android.R.layout.simple_spinner_dropdown_item, names);
+                            accountsSpinner.setAdapter(accountAdapter);
                             //Reset the text views for a new account to be added
                             cardIssuer.setText(null);
                             cardBalance.setText(null);
                             cardWebAddr.setText(null);
                         }
+
+
 
                         //Update the FinanceFragment credit total text view
                         TextView credit = (TextView) getActivity().findViewById(R.id.textView_creditcard);
@@ -533,6 +576,9 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                         Dialog dialog_stocks = (Dialog) dialog;
                         EditText brokerageDeposit = (EditText) dialog_stocks.findViewById(R.id.editText_brokerage);
                         value = brokerageDeposit.getText().toString();
+                        if (value.equals("")) {
+                            break;
+                        }
                         //Update value in database
                         MainActivity.database.createTotal(null, null, value, null, null);
                         //Update the textView
@@ -555,7 +601,10 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         alert.show();
     }
 
-    void SetUpFloatingActionButton() {        /*******SET UP THE FLOATING ACTION BUTTON********/
+    /**
+     * ****SET UP THE FLOATING ACTION BUTTON*******
+     */
+    void SetUpFloatingActionButton() {
         ImageView icon = new ImageView(getActivity()); // Create an icon
         icon.setImageResource(R.drawable.ic_action_new);
 
@@ -630,7 +679,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    //TODO ADD a lot of shit to ShowPaymentReminder()
+
     void ShowPaymentReminder() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -643,19 +692,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                 DataStrings.COLUMN_BILL_DUE);
 
 
-        //TODO: SET UP COMPARES FOR DATES - TO SHOW NOTIFICATION
-        for (int i = 0; i < dates.size(); i++) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            // Date mDate =
-            //     dates.get(i).
-            // dates.get(i) =
-        }
-
         //Create new listview for the alert dialog layout
         final ListView list = new ListView(getActivity());
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+
+        billReminderAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, values);
-        list.setAdapter(adapter);
+        list.setAdapter(billReminderAdapter);
 
 
         /*******SET THE CLICK LISTENER FOR CHECKBOX******/
@@ -677,10 +719,10 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                 switch (posSwitch) {
                     case (0):
                         //PASS URL AND BILLID TO DIALOG - USE ID FOR DELETION OF ROW
-                        checked = showBillDetailsDialog(url.get(position), billId.get(position), adapter);
+                        checked = showBillDetailsDialog(url.get(position), billId.get(position), billReminderAdapter, list);
 
                         //TODO: Checkbox is not updating
-                        list.setItemChecked(0, true);
+                        list.setItemChecked(1, true);
                         break;
                     default:
                         break;
@@ -701,20 +743,34 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
                         Dialog f = (Dialog) dialog;
 
+
+                        DatePicker datePicker = (DatePicker)f.findViewById(R.id.datePicker);
+
+                        Date dueDate = getDateFromDatePicker(datePicker);
+
+
+
+
+                        String due = dueDate.toString();
+                        String newDue = parseDateToddMMyyyy(due);
                         // Set an EditText view to get user input
                         final EditText billName = (EditText) f.findViewById(R.id.editText_billName);
-                        final EditText dueDate = (EditText) f.findViewById(R.id.editText_dueDate);
+                       // final EditText dueDate = (EditText) f.findViewById(R.id.editText_dueDate);
                         final EditText address = (EditText) f.findViewById(R.id.editText_billAddress);
 
                         String name = billName.getText().toString();
                         //TODO APPLY CORRECT FORMATTING HERE - RIGHT ALIGN THE PAID ATTRIBUTE
-                        String date = "Due:  " + dueDate.getText().toString() + "     Paid: ";
+                       // String date = "Due:  " + dueDate.getText().toString() + "     Paid: ";
                         String web = "https://" + address.getText().toString();
+                        String date = "Due:  " + newDue+ "   Paid: ";
 
-                       String alarmDue = dueDate.getText().toString();
+                       // String alarmDue = dueDate.getText().toString();
 
-                        setAlarm(alarmDue);
 
+
+
+
+                        setAlarm(newDue);
 
 
                         //TODO ADD DATE TO DATABASE
@@ -749,9 +805,10 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
 
     //SHOWS VISIT WEB SITE, DELETE BILL, AND MARK AS PAID DIALOG
-    boolean showBillDetailsDialog(final String url, final String pos, final ArrayAdapter adapter) {
+    boolean showBillDetailsDialog(final String url, final String pos, final ArrayAdapter adapter, final ListView list) {
 
         boolean checked;
+
 
 
         //MUST USE LayoutInflater HERE TO INFLATE LAYOUT FOR findViewById
@@ -759,10 +816,16 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         View dialogView = inflater.inflate(R.layout.dialog_bill_detail, null);
 
         //CREATE NEW ALERT DIALOG BUILDER AND BUTTONS
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         Button visitSite = (Button) dialogView.findViewById(R.id.button_visitSite);
         CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.checkBoxPaid);
         Button delete = (Button) dialogView.findViewById(R.id.button_deleteBill);
+
+
+
+
+
+
 
 
         //SET ON CLICK LISTENER TO VISIT URL
@@ -781,23 +844,39 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         });
         //SET ON CLICK LISTENER TO DELETE BILL
         delete.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 MainActivity.database.deleteRow(DataStrings.TABLE_BILLS, "_id", pos);
+
+
                 Toast toast = Toast.makeText(getActivity(), "Bill reminder deleted", Toast.LENGTH_LONG);
                 toast.show();
-                adapter.notifyDataSetChanged();
+
+                final List<String> values = MainActivity.database.getAllFromDb(DataStrings.TABLE_BILLS,
+                        DataStrings.COLUMN_BILL);
+                billReminderAdapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_list_item_multiple_choice, values);
+                list.setAdapter(billReminderAdapter);
+
 
 
             }
         });
+
 
         alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-
+                Log.d("which button", Integer.toString(whichButton));
+            if(whichButton==0) {
+                dialog.dismiss();
+            }
             }
         });
+
+
+
 
 
         alert.setView(dialogView);
@@ -823,25 +902,26 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         final List<String> accountNames = MainActivity.database.getAllFromDb(DataStrings.TABLE_ACCOUNTS,
                 DataStrings.COLUMN_ACCOUNT_NAME);
 
-        final ArrayAdapter<String> accountSpinnerAdapter = new ArrayAdapter<String>(getActivity(),
+        accountAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, accountNames);
 
-        //TODO NOT WORKING - FIX NOTIFY DATA SET CHANGED
+
         if (notify) {
-            accountSpinnerAdapter.notifyDataSetChanged();
+            accountAdapter = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_spinner_dropdown_item, accountNames);
             return;
         }
 
         //Set the first position of spinner - if no accounts added display. Otherwise show " select account"
         if (accountNames.size() == 0) {
-            accountNames.add(0, "No accounts added");
+            accountNames.add(0, "                             No accounts added");
         } else {
-            accountNames.add(0, "Select Account");
+            accountNames.add(0, "                              Select Account");
         }
         //Create spinner for the accounts spinner
-        Spinner accountsSpinner = (Spinner) rootView.findViewById(R.id.accountSpinner);
+        accountsSpinner = (Spinner) rootView.findViewById(R.id.accountSpinner);
 
-        accountsSpinner.setAdapter(accountSpinnerAdapter);
+        accountsSpinner.setAdapter(accountAdapter);
 
 
         //GET ALL VALUES FROM URL COLUMN AND NAME COLUMN OF ACCOUNTS TABLE
@@ -851,7 +931,6 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         final boolean first = false;
 
 
-        //todo: set accounts up through database
         //Accounts spinner click listener - Opens corresponding webpage based on position in list
         AdapterView.OnItemSelectedListener account_listener = new AdapterView.OnItemSelectedListener() {
             @Override
@@ -872,7 +951,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                 ShowAccountAlert(accountURL.get(position - 1));
 
 
-                //TODO Add listeners for add new account.
+
 
             }
 
@@ -888,36 +967,29 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-
-
-
-
-
-    public final void setAlarm(String dateInString){
+    public final void setAlarm(String dateInString) {
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, 0);
 
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM yyyy");
 
 
         try {
 
-           Date date = formatter.parse(dateInString);
+            Date date = formatter.parse(dateInString);
             long firstTime = date.getTime();
             Calendar c = Calendar.getInstance();
 
             Date d = new Date();
             long n = d.getTime();
             // Schedule the alarm!
-            if(firstTime<n+86400000){
-                firstTime=n+2000;
+            if (firstTime < n + 86400000) {
+                firstTime = n + 2000;
             }
             c.add(Calendar.SECOND, 10);
-            //long firstTime =  c.getTimeInMillis();
+            
             alarmManager.set(AlarmManager.RTC_WAKEUP, firstTime, pendingIntent);
 
         } catch (ParseException e) {
@@ -925,11 +997,107 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         }
 
 
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+
+
+
+    }
+
+    public static Date getDateFromDatePicker(DatePicker datePicker){
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+
+
+        return calendar.getTime();
+    }
+    public static class Palette {
+        private String name;
+        private String hexValue;
+        private int intValue;
+        private int position;
+
+        public Palette(String name, String hexValue, int intValue, int position) {
+            this.name = name;
+            this.hexValue = hexValue;
+            this.intValue = intValue;
+            this.position = position;
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+        public String getHexValue() {
+            return hexValue;
+        }
+
+        public int getIntValue() {
+            return intValue;
+        }
+
+        public int getPosition() {
+            return position;
+        }
 
     }
 
 
+    public static class PaletteViewHolder extends RecyclerView.ViewHolder {
 
 
+        protected TextView titleText;
+        protected TextView contentText;
+        protected CardView card;
+        protected WebView stocksWebView;
+        protected boolean isStocks;
+        protected int position;
 
+        public PaletteViewHolder(View itemView) {
+            super(itemView);
+
+
+            if (RecyclerAdapterFinance.layout.equals("stocks")) {
+
+                isStocks = true;
+            } else {
+                isStocks = false;
+            }
+
+            card = (CardView) itemView;
+            titleText = (TextView) itemView.findViewById(R.id.name);
+            contentText = (TextView) itemView.findViewById(R.id.content);
+            stocksWebView = (WebView) itemView.findViewById(R.id.webView_stocks);
+            titleText.setTypeface(MainActivity.robotoThin);
+            contentText.setTypeface(MainActivity.robotoItalic);
+        }
+
+    }
+
+    public String parseDateToddMMyyyy(String time) {
+        String inputPattern = "EEE MMM dd HH:mm:ss zzz yyyy";
+        String outputPattern = "EEE MMM yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
 }

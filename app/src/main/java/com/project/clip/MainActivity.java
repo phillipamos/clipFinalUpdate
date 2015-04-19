@@ -1,11 +1,8 @@
 package com.project.clip;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity
@@ -38,13 +33,23 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private static final String TAG_HOME_FRAGMENT = "homeFragment";
 
-    public static FinanceDataSource database;
 
+    public static FinanceDataSource database;
+    public static Typeface robotoMedium;
+    public static Typeface robotoThin;
+    public static Typeface robotoItalic;
+    public static Typeface robotoRegular;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //Set up all the fonts
+        robotoThin =  Typeface.createFromAsset(this.getAssets(),"Fonts/Roboto-Thin.ttf");
+        robotoMedium = Typeface.createFromAsset(this.getAssets(),"Fonts/Roboto-Medium.ttf");
+        robotoItalic = Typeface.createFromAsset(this.getAssets(),"Fonts/Roboto-Italic.ttf");
+        robotoRegular = Typeface.createFromAsset(this.getAssets(),"Fonts/Roboto-Regular.ttf");
 
         database = new FinanceDataSource(this);
         database.open();
@@ -232,11 +237,33 @@ public class MainActivity extends ActionBarActivity
      * *********ADD FUNDS BUTTON*********************
      */
     public void addFunds(View view) {
+        android.support.v4.app.Fragment fragment = new Fragment_finance_recycler();
+        Bundle bundle = new Bundle();
 
-        android.support.v4.app.Fragment fragment = new FinanceRecycler();
+        bundle.putString("LayoutId","Account");
+        fragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+
+    }
+
+    /**
+     * *********ADD ASSETS BUTTON*******************
+     */
+    public void addAssets(View view) {
+        android.support.v4.app.Fragment fragment = new Fragment_finance_recycler();
+        Bundle bundle = new Bundle();
+
+        bundle.putString("LayoutId", "Assets");
+
+        fragment.setArguments(bundle);
 
 
-        if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
@@ -245,139 +272,69 @@ public class MainActivity extends ActionBarActivity
                     .commit();
 
 
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-
-
-        }
-}
-
-
-    /**
-     * *********ADD ASSETS BUTTON*******************
-     */
-    public void addAssets(View view) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-        alert.setTitle("Add Assests");
-        alert.setMessage("Total Assests: ");
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = prefs.edit();
-
-
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
-
-        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = "$" + input.getText().toString();
-                // Do something with value!
-                editor.putString("assetsString", value);
-                editor.apply();
-
-                //Update the textView
-                TextView assets = (TextView) findViewById(R.id.textView_Assets);
-                assets.setText(value);
-
-
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
-
-        alert.show();
     }
 
     /**
      * *********ADD CREDIT BUTTON*******************
      */
     public void addCredit(View view) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        android.support.v4.app.Fragment fragment = new Fragment_finance_recycler();
+        Bundle bundle = new Bundle();
 
-        alert.setTitle("Add Credit Balance");
-        alert.setMessage("Total Balance: ");
+        bundle.putString("LayoutId", "Account");
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = prefs.edit();
+        fragment.setArguments(bundle);
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
 
-        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = "$" + input.getText().toString();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-                editor.putString("creditString", value);
-                editor.apply();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
 
-                //Update the textView
-                TextView credit = (TextView) findViewById(R.id.textView_creditcard);
-                credit.setText(value);
-            }
-        });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
 
-        alert.show();
+
     }
 
     /**
      * *********ADD STOCKS BUTTON*******************
      */
     public void addStocks(View view) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        android.support.v4.app.Fragment fragment = new Fragment_finance_recycler();
+        Bundle bundle = new Bundle();
 
-        alert.setTitle("Update Market Vale");
-        alert.setMessage("Total Value: ");
+        bundle.putString("LayoutId", "Stocks");
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = prefs.edit();
+        fragment.setArguments(bundle);
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        alert.setView(input);
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = "$" + input.getText().toString();
-
-                editor.putString("stocksString", value);
-                editor.apply();
-
-                //Update the textView
-                TextView stocks = (TextView) findViewById(R.id.textView_stockValue);
-                stocks.setText(value);
-            }
-        });
-
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Canceled.
-            }
-        });
-
-        alert.show();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
-/*        public void onBackPressed()
-        {
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
+    @Override
+    public void onBackPressed() {
+
+
+        if(this.findViewById(R.id.recyclerView_finance)==null){
+            super.onBackPressed();
+
         }
-*/
+        //TODO ADD LAYOUTS OF THE OTHER FRAGMENTS
+        else {
+            android.support.v4.app.Fragment fragment = null;
+            fragment = new HomeFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frame_container, fragment)
+                    .commit();
+        }
+    }
 
 }

@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,14 +49,19 @@ import java.util.List;
 public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
 
 
-
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
+    private static final String[] CREDENTIALS = new String[]{
+
+
+
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -72,13 +78,19 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private boolean logout;
     private CheckBox autoLogin;
     private boolean autoLog;
-
+    public static SharedPreferences Userprefs;
+    public static SharedPreferences.Editor Usereditor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+       Userprefs = PreferenceManager.getDefaultSharedPreferences(this);
+       Usereditor = Userprefs.edit();
+
 
 
 
@@ -89,9 +101,17 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         autoLogin = (CheckBox)findViewById(R.id.checkbox_Signin);
 
 
+        final Intent intent1 = new Intent(this, ActivityForgotPass.class);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Button ForgotPassButton = (Button)findViewById(R.id.button_forgotPass);
+        ForgotPassButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+                startActivity(intent1);
+            }
+        });
 
 
 
@@ -177,43 +197,49 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
 
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 
 
 
 
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+        if(TextUtils.isEmpty(password)&&(isEmailValid(email))){
+            Intent intent = new Intent(this, ActivityRegister.class);
+            startActivity(intent);
         }
+        else {
+            // Check for a valid password, if the user entered one.
+            if (TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+                mPasswordView.setError(getString(R.string.error_invalid_password));
+                focusView = mPasswordView;
+                cancel = true;
+            }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+            // Check for a valid email address.
+            if (TextUtils.isEmpty(email)) {
+                mEmailView.setError(getString(R.string.error_field_required));
+                focusView = mEmailView;
+                cancel = true;
+            } else if (!isEmailValid(email)) {
+                mEmailView.setError("Username is invalid");
+                focusView = mEmailView;
+                cancel = true;
+            }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            if (cancel) {
+                // There was an error; don't attempt login and focus the first
+                // form field with an error.
+                focusView.requestFocus();
+            } else {
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
 
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+                showProgress(true);
+                mAuthTask = new UserLoginTask(email, password);
+                mAuthTask.execute((Void) null);
 
+
+            }
         }
     }
 
@@ -222,7 +248,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
 
-        return email.contains("@");
+
+
+        return email.length()>3;
     }
 
     private boolean isPasswordValid(String password) {
@@ -398,6 +426,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+
+
+
+
+
+
         private final String mEmail;
         private final String mPassword;
 
@@ -417,16 +451,26 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
+
+            if(Userprefs.getString("UserPass",null)==null){
+                Toast toast = Toast.makeText(LoginActivity.this, "Not yet registered",Toast.LENGTH_LONG);
+                toast.show();
+            }
+               else {
+                String[] pieces = Userprefs.getString("UserPass", null).split(":");
+
+
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }
 
-            // TODO: register the new account here.
-            return true;
+
+
+
+
+            return false;
         }
 
         @Override
@@ -438,10 +482,10 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(i);
 
-
-
                 finish();
             } else {
+
+
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
